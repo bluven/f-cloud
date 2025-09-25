@@ -1,0 +1,94 @@
+syntax = "v1"
+
+info (
+	title:   "User Management"
+	desc:    "Authenticate and manage users"
+	author:  "bluven"
+	email:   "yanshiyi1983@163.com"
+	version: "v1"
+)
+
+type User {
+	ID        uint   `json:"id"`
+	Name      string `json:"name"`
+	Mobile    string `json:"mobile"`
+	Email     string `json:"email"`
+	IsAdmin   bool   `json:"isAdmin"`
+	CreatedAt int64  `json:"createdAt"`
+	UpdatedAt int64  `json:"updatedAt"`
+}
+
+type EmptyRequest {}
+
+type EmptyResponse {}
+
+type TokenResponse {
+	Token        string `json:"token"`
+	ExpireAt     int64  `json:"expireAt"`
+	RefreshAfter int64  `json:"refreshAfter"`
+}
+
+type LoginRequest {
+	Username string `json:"username" validate:"required"`
+	Password string `json:"password" validate:"required"`
+}
+
+type GetRequest {
+	ID uint `path:"id"`
+}
+
+type CreateRequest {
+	Name     string `json:"name" validate:"required,username"`
+	Password string `json:"password" validate:"required,min=6,max=32"`
+	Email    string `json:"email" validate:"required,email"`
+	Mobile   string `json:"mobile" validate:"required"`
+	IsAdmin  bool   `json:"isAdmin"`
+}
+
+type UpdateRequest {
+	ID      uint   `path:"id"`
+	Email   string `json:"email" validate:"required,email"`
+	Mobile  string `json:"mobile" validate:"required"`
+	IsAdmin bool   `json:"isAdmin"`
+}
+
+type UpdatePasswordRequest {
+	ID       uint   `path:"id"`
+	Password string `json:"password" validate:"required,min=6,max=32"`
+}
+
+@server (
+	prefix: /v1
+)
+service user {
+	@handler Login
+	post /auth/login (LoginRequest) returns (TokenResponse)
+}
+
+@server (
+	prefix: /v1
+	jwt:    JWTAuth
+)
+service user {
+	@handler GetCurrentUser
+	get /users/me (EmptyRequest) returns (User)
+
+	@handler RefreshToken
+	post /auth/refresh-token (EmptyRequest) returns (TokenResponse)
+
+	@handler GetUser
+	get /users/:id (GetRequest) returns (User)
+
+	@handler CreateUser
+	post /users/ (CreateRequest) returns (User)
+
+	@handler UpdateUser
+	put /users/:id (UpdateRequest) returns (User)
+
+	@handler UpdatePassword
+	put /users/:id/password (UpdatePasswordRequest) returns (EmptyResponse)
+
+	@handler DeleteUser
+	delete /users/:id (GetRequest) returns (EmptyResponse)
+}
+
