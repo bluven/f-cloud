@@ -9,6 +9,7 @@ import (
 
 type Config struct {
 	rest.RestConf
+
 	JWTAuth auth.JWTAuth
 	MySQL   gormx.MySQLConfig
 }

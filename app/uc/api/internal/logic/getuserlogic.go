@@ -2,7 +2,6 @@ package logic
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/zeromicro/go-zero/core/logx"
 
@@ -28,7 +27,6 @@ func NewGetUserLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetUserLo
 }
 
 func (l *GetUserLogic) GetUser(req *types.GetRequest) (resp *types.User, err error) {
-	fmt.Println(auth.GetUserID(l.ctx), req.ID)
 	if !auth.IsAdminOrCurrentUser(l.ctx, req.ID) {
 		return nil, errorx.ErrForbidden
 	}
