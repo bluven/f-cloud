@@ -29,6 +29,10 @@ type JWTAuth struct {
 	accessExpire time.Duration
 }
 
+type JWTAuth2 struct {
+	AccessSecret string
+}
+
 func (a *JWTAuth) Validate() error {
 	if a.AccessSecret == "" {
 		return errors.New("JWTAuth.AccessSecret is empty")

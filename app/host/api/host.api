@@ -1,0 +1,87 @@
+syntax = "v1"
+
+info (
+	title:   "Hosts Management"
+	desc:    "Create, update, delete, and get hosts"
+	author:  "bluven"
+	email:   "yanshiyi1983@163.com"
+	version: "v1"
+)
+
+type Host {
+	ID        uint   `json:"id"`
+	Name      string `json:"name"`
+	UserID    uint   `json:"userID"`
+	CPU       uint   `json:"cpu"`
+	Memory    uint   `json:"memory"`
+	Disk      uint   `json:"disk"`
+	IPv4Addr  string `json:"ipv4Addr"`
+	Status    string `json:"status"`
+	CreatedAt int64  `json:"createdAt"`
+	UpdatedAt int64  `json:"updatedAt"`
+}
+
+type GetHostRequest {
+	ID uint `path:"id"`
+}
+
+type CreateHostRequest {
+	Name     string `json:"name" validate:"required,alphanum,min=2,max=50"`
+	CPU      uint   `json:"cpu" validate:"required"`
+	Memory   uint   `json:"memory" validate:"required"`
+	Disk     uint   `json:"disk" validate:"required"`
+	IPv4Addr string `json:"ipv4Addr" validate:"required,ipv4"`
+}
+
+type UpdateHostRequest {
+	ID       uint   `path:"id"`
+	CPU      uint   `json:"cpu" validate:"required,min=1,max=64"`
+	Memory   uint   `json:"memory" validate:"required,min=1,max=256"`
+	Disk     uint   `json:"disk" validate:"required,min=1"`
+	IPv4Addr string `json:"ipv4Addr" validate:"required,ipv4"`
+}
+
+type HostListRequest {
+	Name     string `form:"name,optional"`
+	CPU      uint   `form:"cpu,optional"`
+	Memory   uint   `form:"memory,optional"`
+	Status   string `form:"status,optional"`
+	Page     uint   `form:"page,default=1" validate:"min=1"`
+	PageSize uint   `form:"pageSize,default=10" validate:"oneof=10 20 30 40 50"`
+}
+
+type HostListResponse {
+	Hosts       []Host `json:"hosts"`
+	TotalRecord uint   `json:"total"`
+	TotalPage   uint   `json:"totalPage"`
+	Page        uint   `json:"page"`
+	PageSize    uint   `json:"pageSize"`
+}
+
+type OperateHostRequest {
+	ID        uint   `path:"id"`
+	Operation string `path:"operation"`
+}
+
+@server (
+	prefix:     /v1
+	jwt:        JWTAuth
+	middleware: AdminRequiredMiddleware
+)
+service host {
+	@handler ListHosts
+	get /hosts/ (HostListRequest) returns (HostListResponse)
+
+	@handler GetHost
+	get /hosts/:id (GetHostRequest) returns (Host)
+
+	@handler CreateHost
+	post /hosts (CreateHostRequest) returns (Host)
+
+	@handler UpdateHost
+	put /hosts/:id (UpdateHostRequest) returns (Host)
+
+	@handler OperateHost
+	post /hosts/:id/:operation (OperateHostRequest) returns (Host)
+}
+
