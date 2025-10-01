@@ -46,7 +46,7 @@ func (l *UpdateUserLogic) UpdateUser(req *types.UpdateRequest) (resp *types.User
 			return gorm.ErrRecordNotFound
 		}
 
-		user, err = query.User.GetByID(req.ID)
+		user, err = tx.User.GetByID(req.ID)
 		return err
 	})
 	if err != nil {
