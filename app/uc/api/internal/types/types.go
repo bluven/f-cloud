@@ -21,6 +21,20 @@ type GetRequest struct {
 	ID uint `path:"id"`
 }
 
+type ListRequest struct {
+	Name     string `form:"name,optional"`
+	Page     uint   `form:"page,default=1" validate:"min=1"`
+	PageSize uint   `form:"pageSize,default=10" validate:"oneof=10 20 30 40 50"`
+}
+
+type ListResponse struct {
+	Users       []User `json:"users"`
+	TotalRecord uint   `json:"total"`
+	TotalPage   uint   `json:"totalPage"`
+	Page        uint   `json:"page"`
+	PageSize    uint   `json:"pageSize"`
+}
+
 type LoginRequest struct {
 	Username string `json:"username" validate:"required"`
 	Password string `json:"password" validate:"required"`

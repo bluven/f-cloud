@@ -31,6 +31,11 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				Handler: RefreshTokenHandler(serverCtx),
 			},
 			{
+				Method:  http.MethodGet,
+				Path:    "/users",
+				Handler: ListUsersHandler(serverCtx),
+			},
+			{
 				Method:  http.MethodPost,
 				Path:    "/users/",
 				Handler: CreateUserHandler(serverCtx),

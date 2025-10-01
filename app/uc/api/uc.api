@@ -57,6 +57,20 @@ type UpdatePasswordRequest {
 	Password string `json:"password" validate:"required,min=6,max=32"`
 }
 
+type ListRequest {
+	Name     string `form:"name,optional"`
+	Page     uint   `form:"page,default=1" validate:"min=1"`
+	PageSize uint   `form:"pageSize,default=10" validate:"oneof=10 20 30 40 50"`
+}
+
+type ListResponse {
+	Users       []User `json:"users"`
+	TotalRecord uint   `json:"total"`
+	TotalPage   uint   `json:"totalPage"`
+	Page        uint   `json:"page"`
+	PageSize    uint   `json:"pageSize"`
+}
+
 @server (
 	prefix: /v1
 )
@@ -75,6 +89,9 @@ service user {
 
 	@handler RefreshToken
 	post /auth/refresh-token (EmptyRequest) returns (TokenResponse)
+
+	@handler ListUsers
+	get /users (ListRequest) returns (ListResponse)
 
 	@handler GetUser
 	get /users/:id (GetRequest) returns (User)
