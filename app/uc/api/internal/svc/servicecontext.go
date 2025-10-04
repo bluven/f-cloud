@@ -24,6 +24,6 @@ func NewServiceContext(c config.Config) *ServiceContext {
 
 	return &ServiceContext{
 		Config:                  c,
-		AdminRequiredMiddleware: middleware.NewAdminRequiredMiddleware().Handle,
+		AdminRequiredMiddleware: middleware.AdminRequiredMiddleware,
 	}
 }

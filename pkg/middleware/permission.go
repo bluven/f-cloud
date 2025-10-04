@@ -34,4 +34,8 @@ var (
 	CurrentUserRequiredMiddleware = newIsAllowedMiddleware(func(ctx context.Context) bool {
 		return auth.IsCurrentUser(ctx, auth.GetUserID(ctx))
 	})
+
+	AdminRequiredMiddleware = newIsAllowedMiddleware(func(ctx context.Context) bool {
+		return auth.IsAdmin(ctx)
+	})
 )
