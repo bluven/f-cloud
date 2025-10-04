@@ -10,6 +10,10 @@ func IsAdminOrCurrentUser(ctx context.Context, userID uint) bool {
 	return IsAdmin(ctx) || GetUserID(ctx) == userID
 }
 
+func IsCurrentUser(ctx context.Context, userID uint) bool {
+	return GetUserID(ctx) == userID
+}
+
 func GetUserID(ctx context.Context) uint {
 	uidStr := ctx.Value("uid").(json.Number)
 	uid, _ := strconv.ParseUint(uidStr.String(), 10, 32)

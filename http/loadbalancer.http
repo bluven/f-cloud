@@ -1,0 +1,45 @@
+@host = 127.0.0.1:9090
+@contentType = application/json
+@token={{$dotenv TOKEN}}
+
+
+###
+# @prompt id
+GET http://{{host}}/v1/loadbalancers/{{id}} HTTP/1.1
+Authorization: Bearer {{token}}
+
+###
+# @prompt page
+GET http://{{host}}/v1/loadbalancers?page={{page}} HTTP/1.1
+Authorization: Bearer {{token}}
+
+
+###
+# @prompt name
+POST http://{{host}}/v1/loadbalancers HTTP/1.1
+Content-Type: {{contentType}}
+Authorization: Bearer {{token}}
+
+{
+    "name": "{{name}}",
+    "algorithm": "roundrobin",
+    "networkID": 1
+}
+
+###
+# @prompt id
+PUT http://{{host}}/v1/loadbalancers/{{id}} HTTP/1.1
+Content-Type: {{contentType}}
+Authorization: Bearer {{token}}
+
+{
+    "id": "{{id}}",
+    "algorithm": "roundrobin",
+    "networkID": 1
+}
+
+###
+# @prompt id
+DELETE http://{{host}}/v1/loadbalancers/{{id}} HTTP/1.1
+Content-Type: {{contentType}}
+Authorization: Bearer {{token}}

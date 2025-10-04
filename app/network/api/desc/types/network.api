@@ -1,0 +1,48 @@
+syntax = "v1"
+
+info (
+	title: "Network API"
+	desc: "Manage network resources"
+	author: "bluven"
+	email: "yanshiyi1983@163.com"
+)
+
+type Network {
+	ID        uint   `json:"id"`
+	Name      string `json:"name"`
+	IPv4Addr  string `json:"ipv4Addr"`
+	Bandwidth uint   `json:"bandwidth"`
+	Traffic   uint   `json:"traffic"`
+	CreatedAt int64  `json:"createdAt"`
+	UpdatedAt int64  `json:"updatedAt"`
+}
+
+type CreateNetworkRequest {
+	Name      string `json:"name" validate:"required,min=2,max=50"`
+	IPv4Addr  string `json:"ipv4Addr" validate:"required,ipv4"`
+	Bandwidth uint   `json:"bandwidth" validate:"required,min=1,max=1000"`
+	Traffic   uint   `json:"traffic" validate:"required,min=50,max=10000"`
+}
+
+type UpdateNetworkRequest {
+	ID        uint   `path:"id"`
+	IPv4Addr  string `json:"ipv4Addr" validate:"required,ipv4"`
+	Bandwidth uint   `json:"bandwidth" validate:"required,min=1,max=1000"`
+	Traffic   uint   `json:"traffic" validate:"required,min=50,max=10000"`
+}
+
+type ListNetworkRequest {
+	Name     string `form:"name,optional"`
+	Page     uint   `form:"page,default=1" validate:"min=1"`
+	PageSize uint   `form:"pageSize,default=10" validate:"oneof=10 20 30 40 50"`
+}
+
+type ListNetworkResponse {
+	Items  []Network `json:"networks"`
+	TotalRecord uint   `json:"total"`
+	TotalPage   uint   `json:"totalPage"`
+	Page        uint   `json:"page"`
+	PageSize    uint   `json:"pageSize"`
+}
+
+

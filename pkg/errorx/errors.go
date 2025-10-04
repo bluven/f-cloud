@@ -5,8 +5,9 @@ import (
 )
 
 var (
-	ErrNotAuthorized = New(http.StatusUnauthorized, "You are not authorized")
-	ErrForbidden     = New(http.StatusForbidden, "You are not authorized to access this resource")
+	ErrNotAuthorized  = New(http.StatusUnauthorized, "You are not authorized")
+	ErrForbidden      = New(http.StatusForbidden, "You are not authorized to access this resource")
+	ErrRecordNotFound = New(http.StatusNotFound, "Record not found")
 )
 
 type LogicError struct {

@@ -1,0 +1,14 @@
+syntax = "v1"
+
+
+type EmptyRequest {}
+
+type EmptyResponse {}
+
+type GetRequest {
+	ID uint `path:"id"`
+}
+
+type DeleteRequest {
+	ID uint `path:"id"`
+}

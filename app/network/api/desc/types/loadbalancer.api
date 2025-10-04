@@ -1,0 +1,37 @@
+syntax = "v1"
+
+type LoadBalancer {
+	ID        uint   `json:"id"`
+	Name      string `json:"name"`
+  NetworkID *uint   `json:"networkID"`
+  Network   *Network `json:"network"`
+	Algorithm string `json:"algorithm"`
+	CreatedAt int64  `json:"createdAt"`
+	UpdatedAt int64  `json:"updatedAt"`
+}
+
+type CreateLoadBalancerRequest {
+	Name      string `json:"name" validate:"required,min=2,max=50"`
+	NetworkID *uint `json:"networkID,optional"`
+	Algorithm string `json:"algorithm" validate:"required,oneof=roundrobin leastconn weighted leastresp iphash"`
+}
+
+type UpdateLoadBalancerRequest {
+	ID        uint   `path:"id"`
+	NetworkID *uint `json:"networkID,optional"`
+	Algorithm string `json:"algorithm" validate:"required,oneof=roundrobin leastconn weighted leastresp iphash"`
+}
+
+type ListLoadBalancerRequest {
+	Name     string `form:"name,optional"`
+	Page     uint   `form:"page,default=1" validate:"min=1"`
+	PageSize uint   `form:"pageSize,default=10" validate:"oneof=10 20 30 40 50"`
+}
+
+type ListLoadBalancerResponse {
+	Items  []LoadBalancer `json:"networks"`
+	TotalRecord uint   `json:"total"`
+	TotalPage   uint   `json:"totalPage"`
+	Page        uint   `json:"page"`
+	PageSize    uint   `json:"pageSize"`
+}

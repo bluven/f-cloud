@@ -1,0 +1,61 @@
+syntax = "v1"
+
+info (
+	title:  "Network API"
+	desc:   "Manage network resources"
+	author: "bluven"
+	email:  "yanshiyi1983@163.com"
+)
+
+import (
+	"types/share.api"
+	"types/network.api"
+	"types/loadbalancer.api"
+)
+
+@server (
+	prefix:     /v1
+	jwt:        JWTAuth
+	group:      network
+	middleware: CurrentUserRequiredMiddleware
+)
+service network {
+	@handler GetNetwork
+	get /networks/:id (GetRequest) returns (Network)
+
+	@handler ListNetworks
+	get /networks (ListNetworkRequest) returns (ListNetworkResponse)
+
+	@handler CreateNetwork
+	post /networks (CreateNetworkRequest) returns (Network)
+
+	@handler UpdateNetwork
+	put /networks/:id (UpdateNetworkRequest) returns (Network)
+
+	@handler DeleteNetwork
+	delete /networks/:id (DeleteRequest) returns (EmptyResponse)
+}
+
+@server (
+	prefix:     /v1
+	jwt:        JWTAuth
+	group:      loadbalancer
+	middleware: CurrentUserRequiredMiddleware
+)
+service network {
+	@handler GetLoadBalancer
+	get /loadbalancers/:id (GetRequest) returns (LoadBalancer)
+
+	@handler ListLoadBalancers
+	get /loadbalancers (ListLoadBalancerRequest) returns (ListLoadBalancerResponse)
+
+	@handler CreateLoadBalancer
+	post /loadbalancers (CreateLoadBalancerRequest) returns (LoadBalancer)
+
+	@handler UpdateLoadBalancer
+	put /loadbalancers/:id (UpdateLoadBalancerRequest) returns (LoadBalancer)
+
+	@handler DeleteLoadBalancer
+	delete /loadbalancers/:id (DeleteRequest) returns (EmptyResponse)
+}
+
