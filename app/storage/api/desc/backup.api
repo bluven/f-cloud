@@ -1,0 +1,29 @@
+syntax = "v1"
+
+type Backup {
+	ID        uint   `json:"id"`
+	Name      string `json:"name"`
+  Schedule  string `json:"schedule"`
+	DiskID    *uint   `json:"diskID,omitempty"`
+	CreatedAt int64  `json:"createdAt"`
+	UpdatedAt int64  `json:"updatedAt"`
+}
+
+type CreateBackupRequest {
+	Name      string `json:"name" validate:"required,min=2,max=50"`
+	Schedule  string `json:"schedule" validate:"required"`
+	DiskID    *uint   `json:"diskID,optional,omitempty"`
+}
+
+type UpdateBackupRequest {
+	ID        uint   `path:"id"`
+	Schedule  string `json:"schedule" validate:"required"`
+}
+
+type ListBackupRequest {
+	DiskID   uint   `path:"diskID"`
+}
+
+type ListBackupResponse {
+	Items  []Backup `json:"backups"`
+}

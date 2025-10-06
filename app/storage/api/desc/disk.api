@@ -1,0 +1,35 @@
+syntax = "v1"
+
+type Disk {
+	ID        uint   `json:"id"`
+	Name      string `json:"name"`
+	Size      uint   `json:"size"`
+  Type      string `json:"type"`
+	CreatedAt int64  `json:"createdAt"`
+	UpdatedAt int64  `json:"updatedAt"`
+}
+
+type CreateDiskRequest {
+	Name      string `json:"name" validate:"required,min=2,max=50"`
+	Size      uint   `json:"size" validate:"required,min=1,max=10000"`
+	Type      string `json:"type" validate:"required,oneof=hard ssd"`
+}
+
+type ExtendDiskRequest {
+	ID        uint   `path:"id"`
+	Size      uint   `json:"size" validate:"required,min=1,max=10000"`
+}
+
+type ListDiskRequest {
+	Name     string `form:"name,optional"`
+	Page     uint   `form:"page,default=1" validate:"min=1"`
+	PageSize uint   `form:"pageSize,default=10" validate:"oneof=10 20 30 40 50"`
+}
+
+type ListDiskResponse {
+	Items  []Disk `json:"disks"`
+	TotalRecord uint   `json:"total"`
+	TotalPage   uint   `json:"totalPage"`
+	Page        uint   `json:"page"`
+	PageSize    uint   `json:"pageSize"`
+}

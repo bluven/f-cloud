@@ -1,0 +1,61 @@
+syntax = "v1"
+
+info (
+	title:  "Storage API"
+	desc:   "Manage disks and backups"
+	author: "bluven"
+	email:  "yanshiyi1983@163.com"
+)
+
+import (
+	"share.api"
+	"disk.api"
+	"backup.api"
+)
+
+@server (
+	prefix:     /v1
+	jwt:        JWTAuth
+	middleware: CurrentUserRequiredMiddleware
+	group:      disk
+)
+service storage-api {
+	@handler GetDisk
+	get /disks/:id (GetRequest) returns (Disk)
+
+	@handler ListDisks
+	get /disks (ListDiskRequest) returns (ListDiskResponse)
+
+	@handler CreateDisk
+	post /disks (CreateDiskRequest) returns (Disk)
+
+	@handler ExtendDisk
+	post /disks/:id/extend (ExtendDiskRequest) returns (Disk)
+
+	@handler DeleteDisk
+	delete /disks/:id (DeleteRequest) returns (EmptyResponse)
+}
+
+@server (
+	prefix:     /v1
+	jwt:        JWTAuth
+	middleware: CurrentUserRequiredMiddleware
+	group:      backup
+)
+service storage-api {
+	@handler GetBackup
+	get /backups/:id (GetRequest) returns (Backup)
+
+	@handler ListBackups
+	get /backups (ListBackupRequest) returns (ListBackupResponse)
+
+	@handler CreateDisk
+	post /backups (CreateBackupRequest) returns (Backup)
+
+	@handler UpdateBackup
+	put /backups/:id (UpdateBackupRequest) returns (Backup)
+
+	@handler DeleteBackup
+	delete /backups/:id (DeleteRequest) returns (EmptyResponse)
+}
+
