@@ -1,0 +1,87 @@
+syntax = "v1"
+
+info (
+	title:  "Instance API"
+	desc:   "Manage virtual machine resources"
+	author: "bluven"
+	email:  "yanshiyi1983@163.com"
+)
+
+import (
+	"../../../share/api/share.api"
+)
+
+type Instance {
+	ID        uint   `json:"id"`
+	Name      string `json:"name"`
+	UserID    uint   `json:"userID"`
+	CPU       uint   `json:"cpu"`
+	Memory    uint   `json:"memory"`
+	OS        string `json:"os"`
+	Image     string `json:"image"`
+	NetworkID uint   `json:"networkID"`
+	DiskID    uint   `json:"diskID"`
+	Status    string `json:"status"`
+}
+
+type CreateInstanceRequest {
+	Name      string `json:"name" validate:"required"`
+	CPU       uint   `json:"cpu" validate:"required,oneof=1 2 4 8 16 32"`
+	Memory    uint   `json:"memory" validate:"required,oneof=4 8 16 32 64 128 256"`
+	OS        string `json:"os" validate:"required,oneof=linux windows"`
+	Image     string `json:"image" validate:"required"`
+	NetworkID uint   `json:"networkID" validate:"required"`
+	DiskID    uint   `json:"diskID" validate:"required"`
+}
+
+type UpgradeInstanceRequest {
+	ID     uint `path:"id"`
+	CPU    uint `json:"cpu" validate:"required,oneof=1 2 4 8 16 32"`
+	Memory uint `json:"memory" validate:"required,oneof=4 8 16 32 64 128 256"`
+}
+
+type ListInstancesRequest {
+	Name     string `form:"name,optional"`
+	Page     uint   `form:"page,default=1" validate:"min=1"`
+	PageSize uint   `form:"pageSize,default=10" validate:"oneof=10 20 30 40 50"`
+}
+
+type ListInstancesResponse {
+	Items       []Instance `json:"items"`
+	TotalRecord uint       `json:"total"`
+	TotalPage   uint       `json:"totalPage"`
+	Page        uint       `json:"page"`
+	PageSize    uint       `json:"pageSize"`
+}
+
+type OperateInstanceRequest {
+	ID        uint   `path:"id"`
+	Operation string `path:"operation" validate:"required,oneof=start stop restart"`
+}
+
+@server (
+	prefix:     /v1
+	jwt:        JWTAuth
+	middleware: CurrentUserRequired
+	group:      instance
+)
+service instance {
+	@handler GetInstance
+	get /instances/:id (GetRequest) returns (Instance)
+
+	@handler ListInstances
+	get /instances (ListInstancesRequest) returns (ListInstancesResponse)
+
+	@handler CreateInstance
+	post /instances (CreateInstanceRequest) returns (Instance)
+
+	@handler UpgradeInstance
+	put /instances/:id/upgrade (UpgradeInstanceRequest) returns (Instance)
+
+	@handler OperateInstance
+	post /instances/:id/:operation (OperateInstanceRequest) returns (Instance)
+
+	@handler DeleteInstance
+	delete /instances/:id (DeleteRequest) returns (EmptyResponse)
+}
+

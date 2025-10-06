@@ -1,0 +1,12 @@
+Name: instance
+Host: 0.0.0.0
+Port: 5050
+
+JWTAuth:
+  AccessSecret: "12345678901234567890123456789012"
+
+MySQL:
+  DataSource: bluven:Admin123!@tcp(127.0.0.1:3306)/f-cloud?charset=utf8mb4&parseTime=True&loc=Local
+  MaxIdleConns: 10    
+  MaxOpenConns: 50
+  ConnMaxLifetime: 1h

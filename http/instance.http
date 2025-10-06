@@ -1,0 +1,55 @@
+@host = 127.0.0.1:5050
+@contentType = application/json
+@token={{$dotenv TOKEN}}
+
+
+###
+# @prompt id
+GET http://{{host}}/v1/instances/{{id}} HTTP/1.1
+Authorization: Bearer {{token}}
+
+###
+# @prompt page
+GET http://{{host}}/v1/instances?page={{page}}&name=blu HTTP/1.1
+Authorization: Bearer {{token}}
+
+
+###
+# @prompt name
+POST http://{{host}}/v1/instances HTTP/1.1
+Content-Type: {{contentType}}
+Authorization: Bearer {{token}}
+
+{
+    "name": "{{name}}",
+    "cpu": 16,
+    "memory": 32,
+    "os": "linux",
+    "image": "ubuntu-22.04",
+    "diskID": 1,
+    "networkID": 1
+}
+
+###
+# @prompt id
+PUT http://{{host}}/v1/instances/{{id}}/upgrade HTTP/1.1
+Content-Type: {{contentType}}
+Authorization: Bearer {{token}}
+
+{
+    "cpu": 32,
+    "memory": 64
+}
+
+###
+# @prompt id
+# @prompt operation
+POST http://{{host}}/v1/instances/{{id}}/{{operation}} HTTP/1.1
+Content-Type: {{contentType}}
+Authorization: Bearer {{token}}
+
+###
+# @prompt id
+DELETE http://{{host}}/v1/instances/{{id}} HTTP/1.1
+Content-Type: {{contentType}}
+Authorization: Bearer {{token}}

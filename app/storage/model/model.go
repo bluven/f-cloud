@@ -24,8 +24,8 @@ type Backup struct {
 	gormx.Model
 	Name     string `json:"name"`
 	Schedule string `json:"Schedule"`
-	DiskID   *uint  `json:"diskID"`
-	Disk     *Disk  `json:"disk" gorm:"foreignKey:DiskID;references:ID"`
+	DiskID   uint   `json:"diskID"`
+	Disk     Disk   `json:"disk" gorm:"foreignKey:DiskID;references:ID"`
 }
 
 type Query interface {
