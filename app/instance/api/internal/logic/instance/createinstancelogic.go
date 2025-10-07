@@ -7,6 +7,7 @@ import (
 	"github.com/bluven/f-cloud/app/instance/api/internal/types"
 	"github.com/bluven/f-cloud/app/instance/model"
 	"github.com/bluven/f-cloud/app/instance/query"
+	"github.com/bluven/f-cloud/app/storage/rpc/storage"
 	"github.com/bluven/f-cloud/pkg/auth"
 	"github.com/bluven/f-cloud/pkg/errorx"
 
@@ -46,6 +47,16 @@ func (l *CreateInstanceLogic) CreateInstance(req *types.CreateInstanceRequest) (
 		}
 
 		return tx.Instance.Create(&instance)
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	// todo: put in job queue
+	// 调用 storage rpc 挂载磁盘
+	_, err = l.svcCtx.StorageRpc.MountDisk(l.ctx, &storage.MountDiskRequest{
+		DiskId:     uint32(req.DiskID),
+		InstanceId: uint32(instance.ID),
 	})
 	if err != nil {
 		return nil, err

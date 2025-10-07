@@ -5,6 +5,7 @@ type Disk {
 	Name      string `json:"name"`
 	Size      uint   `json:"size"`
   Type      string `json:"type"`
+	InstanceID *uint  `json:"instanceID"`
 	CreatedAt int64  `json:"createdAt"`
 	UpdatedAt int64  `json:"updatedAt"`
 }

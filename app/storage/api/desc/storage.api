@@ -19,7 +19,7 @@ import (
 	middleware: CurrentUserRequiredMiddleware
 	group:      disk
 )
-service storage-api {
+service storage {
 	@handler GetDisk
 	get /disks/:id (GetRequest) returns (Disk)
 
@@ -42,7 +42,7 @@ service storage-api {
 	middleware: CurrentUserRequiredMiddleware
 	group:      backup
 )
-service storage-api {
+service storage {
 	@handler GetBackup
 	get /backups/:id (GetRequest) returns (Backup)
 

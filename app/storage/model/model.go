@@ -15,9 +15,10 @@ const (
 
 type Disk struct {
 	gormx.Model
-	Name string   `json:"name"`
-	Size uint     `json:"Size"`
-	Type DiskType `json:"type"`
+	Name       string   `json:"name"`
+	Size       uint     `json:"Size"`
+	Type       DiskType `json:"type"`
+	InstanceID *uint    `json:"instanceID"`
 }
 
 type Backup struct {
@@ -37,4 +38,9 @@ type Query interface {
 
 	// SELECT * FROM @@table WHERE name = '%@name'
 	SelectByName(name string) ([]gen.T, error)
+}
+
+type DiskQuery interface {
+	// UPDATE @@table SET instance_id = @instanceID WHERE id = @id
+	UpdateInstanceID(id uint, instanceID *uint) (gen.RowsAffected, error)
 }

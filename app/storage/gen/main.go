@@ -33,6 +33,7 @@ func main() {
 	g.UseDB(db)
 	g.ApplyBasic(model.Disk{}, model.Backup{})
 	g.ApplyInterface(func(model.Query) {}, model.Disk{}, model.Backup{})
+	g.ApplyInterface(func(model.DiskQuery) {}, model.Disk{})
 
 	g.Execute()
 }

@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package storage;
+option go_package="./proto";
+
+message MountDiskRequest {
+  uint32 instance_id = 1;
+  uint32 disk_id = 2;
+}
+
+message MountDiskResponse {
+}
+
+message UnmountDiskRequest {
+  uint32 disk_id = 1;
+}
+
+message UnmountDiskResponse {
+}
+
+service Storage {
+  rpc MountDisk(MountDiskRequest) returns(MountDiskResponse);
+  rpc UnmountDisk(UnmountDiskRequest) returns(UnmountDiskResponse);
+}

@@ -7,7 +7,7 @@ type Backup struct {
 	ID        uint   `json:"id"`
 	Name      string `json:"name"`
 	Schedule  string `json:"schedule"`
-	DiskID    *uint  `json:"diskID,omitempty"`
+	DiskID    uint   `json:"diskID,omitempty"`
 	CreatedAt int64  `json:"createdAt"`
 	UpdatedAt int64  `json:"updatedAt"`
 }
@@ -15,7 +15,7 @@ type Backup struct {
 type CreateBackupRequest struct {
 	Name     string `json:"name" validate:"required,min=2,max=50"`
 	Schedule string `json:"schedule" validate:"required"`
-	DiskID   *uint  `json:"diskID,optional,omitempty"`
+	DiskID   uint   `json:"diskID,optional,omitempty"`
 }
 
 type CreateDiskRequest struct {
@@ -29,12 +29,13 @@ type DeleteRequest struct {
 }
 
 type Disk struct {
-	ID        uint   `json:"id"`
-	Name      string `json:"name"`
-	Size      uint   `json:"size"`
-	Type      string `json:"type"`
-	CreatedAt int64  `json:"createdAt"`
-	UpdatedAt int64  `json:"updatedAt"`
+	ID         uint   `json:"id"`
+	Name       string `json:"name"`
+	Size       uint   `json:"size"`
+	Type       string `json:"type"`
+	InstanceID *uint  `json:"instanceID"`
+	CreatedAt  int64  `json:"createdAt"`
+	UpdatedAt  int64  `json:"updatedAt"`
 }
 
 type EmptyRequest struct {

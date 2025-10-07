@@ -35,6 +35,7 @@ func newDisk(db *gorm.DB, opts ...gen.DOOption) disk {
 	_disk.Name = field.NewString(tableName, "name")
 	_disk.Size = field.NewUint(tableName, "size")
 	_disk.Type = field.NewString(tableName, "type")
+	_disk.InstanceID = field.NewUint(tableName, "instance_id")
 
 	_disk.fillFieldMap()
 
@@ -44,13 +45,14 @@ func newDisk(db *gorm.DB, opts ...gen.DOOption) disk {
 type disk struct {
 	diskDo
 
-	ALL       field.Asterisk
-	ID        field.Uint
-	CreatedAt field.Time
-	UpdatedAt field.Time
-	Name      field.String
-	Size      field.Uint
-	Type      field.String
+	ALL        field.Asterisk
+	ID         field.Uint
+	CreatedAt  field.Time
+	UpdatedAt  field.Time
+	Name       field.String
+	Size       field.Uint
+	Type       field.String
+	InstanceID field.Uint
 
 	fieldMap map[string]field.Expr
 }
@@ -73,6 +75,7 @@ func (d *disk) updateTableName(table string) *disk {
 	d.Name = field.NewString(table, "name")
 	d.Size = field.NewUint(table, "size")
 	d.Type = field.NewString(table, "type")
+	d.InstanceID = field.NewUint(table, "instance_id")
 
 	d.fillFieldMap()
 
@@ -89,13 +92,14 @@ func (d *disk) GetFieldByName(fieldName string) (field.OrderExpr, bool) {
 }
 
 func (d *disk) fillFieldMap() {
-	d.fieldMap = make(map[string]field.Expr, 6)
+	d.fieldMap = make(map[string]field.Expr, 7)
 	d.fieldMap["id"] = d.ID
 	d.fieldMap["created_at"] = d.CreatedAt
 	d.fieldMap["updated_at"] = d.UpdatedAt
 	d.fieldMap["name"] = d.Name
 	d.fieldMap["size"] = d.Size
 	d.fieldMap["type"] = d.Type
+	d.fieldMap["instance_id"] = d.InstanceID
 }
 
 func (d disk) clone(db *gorm.DB) disk {
@@ -175,6 +179,7 @@ type IDiskDo interface {
 	GetByID(id uint) (result model.Disk, err error)
 	Exists(name string) (result bool, err error)
 	SelectByName(name string) (result []model.Disk, err error)
+	UpdateInstanceID(id uint, instanceID *uint) (rowsAffected int64, err error)
 }
 
 // SELECT * FROM @@table WHERE id = @id
@@ -214,6 +219,23 @@ func (d diskDo) SelectByName(name string) (result []model.Disk, err error) {
 
 	var executeSQL *gorm.DB
 	executeSQL = d.UnderlyingDB().Raw(generateSQL.String()).Find(&result) // ignore_security_alert
+	err = executeSQL.Error
+
+	return
+}
+
+// UPDATE @@table SET instance_id = @instanceID WHERE id = @id
+func (d diskDo) UpdateInstanceID(id uint, instanceID *uint) (rowsAffected int64, err error) {
+	var params []interface{}
+
+	var generateSQL strings.Builder
+	params = append(params, instanceID)
+	params = append(params, id)
+	generateSQL.WriteString("UPDATE disks SET instance_id = ? WHERE id = ? ")
+
+	var executeSQL *gorm.DB
+	executeSQL = d.UnderlyingDB().Exec(generateSQL.String(), params...) // ignore_security_alert
+	rowsAffected = executeSQL.RowsAffected
 	err = executeSQL.Error
 
 	return

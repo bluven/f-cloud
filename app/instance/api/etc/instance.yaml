@@ -10,3 +10,8 @@ MySQL:
   MaxIdleConns: 10    
   MaxOpenConns: 50
   ConnMaxLifetime: 1h
+
+StorageRpcConf:
+  Endpoints:
+    - 127.0.0.1:3636
+  NonBlock: true
