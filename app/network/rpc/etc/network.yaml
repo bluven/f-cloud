@@ -1,0 +1,12 @@
+Name: network.rpc
+ListenOn: 0.0.0.0:9595
+Etcd:
+  Hosts:
+  - 127.0.0.1:2379
+  Key: network.rpc
+
+MySQL:
+  DataSource: bluven:Admin123!@tcp(127.0.0.1:3306)/f-cloud?charset=utf8mb4&parseTime=True&loc=Local
+  MaxIdleConns: 10    
+  MaxOpenConns: 50
+  ConnMaxLifetime: 1h

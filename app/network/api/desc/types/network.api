@@ -13,6 +13,7 @@ type Network {
 	IPv4Addr  string `json:"ipv4Addr"`
 	Bandwidth uint   `json:"bandwidth"`
 	Traffic   uint   `json:"traffic"`
+	InstanceID *uint  `json:"instanceID"`
 	CreatedAt int64  `json:"createdAt"`
 	UpdatedAt int64  `json:"updatedAt"`
 }

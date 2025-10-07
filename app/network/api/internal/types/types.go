@@ -69,13 +69,14 @@ type LoadBalancer struct {
 }
 
 type Network struct {
-	ID        uint   `json:"id"`
-	Name      string `json:"name"`
-	IPv4Addr  string `json:"ipv4Addr"`
-	Bandwidth uint   `json:"bandwidth"`
-	Traffic   uint   `json:"traffic"`
-	CreatedAt int64  `json:"createdAt"`
-	UpdatedAt int64  `json:"updatedAt"`
+	ID         uint   `json:"id"`
+	Name       string `json:"name"`
+	IPv4Addr   string `json:"ipv4Addr"`
+	Bandwidth  uint   `json:"bandwidth"`
+	Traffic    uint   `json:"traffic"`
+	InstanceID *uint  `json:"instanceID"`
+	CreatedAt  int64  `json:"createdAt"`
+	UpdatedAt  int64  `json:"updatedAt"`
 }
 
 type UpdateLoadBalancerRequest struct {

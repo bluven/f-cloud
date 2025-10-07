@@ -6,13 +6,14 @@ import (
 
 func FromNetwork(network model.Network) *Network {
 	return &Network{
-		ID:        network.ID,
-		Name:      network.Name,
-		IPv4Addr:  network.IPv4Addr,
-		Bandwidth: network.Bandwidth,
-		Traffic:   network.Traffic,
-		CreatedAt: network.CreatedAt.Unix(),
-		UpdatedAt: network.UpdatedAt.Unix(),
+		ID:         network.ID,
+		Name:       network.Name,
+		IPv4Addr:   network.IPv4Addr,
+		Bandwidth:  network.Bandwidth,
+		Traffic:    network.Traffic,
+		InstanceID: network.InstanceID,
+		CreatedAt:  network.CreatedAt.Unix(),
+		UpdatedAt:  network.UpdatedAt.Unix(),
 	}
 }
 

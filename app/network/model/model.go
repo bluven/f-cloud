@@ -8,10 +8,11 @@ import (
 
 type Network struct {
 	gormx.Model
-	Name      string `json:"name"`
-	IPv4Addr  string `json:"ipv4Addr" gorm:"column:ipv4_addr"`
-	Bandwidth uint   `json:"bandwidth"`
-	Traffic   uint   `json:"traffic"`
+	Name       string `json:"name"`
+	IPv4Addr   string `json:"ipv4Addr" gorm:"column:ipv4_addr"`
+	Bandwidth  uint   `json:"bandwidth"`
+	Traffic    uint   `json:"traffic"`
+	InstanceID *uint  `json:"instanceID"`
 }
 
 type LoadBalancer struct {
@@ -31,4 +32,9 @@ type Query interface {
 
 	// SELECT * FROM @@table WHERE name = '%@name'
 	SelectByName(name string) ([]gen.T, error)
+}
+
+type NetworkQuery interface {
+	// UPDATE @@table SET instance_id = @instanceID WHERE id = @id
+	UpdateInstanceID(id uint, instanceID *uint) (gen.RowsAffected, error)
 }

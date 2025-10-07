@@ -15,3 +15,8 @@ StorageRpcConf:
   Endpoints:
     - 127.0.0.1:3636
   NonBlock: true
+
+NetworkRpcConf:
+  Endpoints:
+    - 127.0.0.1:9595
+  NonBlock: true

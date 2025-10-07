@@ -33,6 +33,7 @@ func main() {
 	g.UseDB(db)
 	g.ApplyBasic(model.Network{}, model.LoadBalancer{})
 	g.ApplyInterface(func(model.Query) {}, model.Network{}, model.LoadBalancer{})
+	g.ApplyInterface(func(model.NetworkQuery) {}, model.Network{})
 
 	g.Execute()
 }

@@ -36,6 +36,7 @@ func newNetwork(db *gorm.DB, opts ...gen.DOOption) network {
 	_network.IPv4Addr = field.NewString(tableName, "ipv4_addr")
 	_network.Bandwidth = field.NewUint(tableName, "bandwidth")
 	_network.Traffic = field.NewUint(tableName, "traffic")
+	_network.InstanceID = field.NewUint(tableName, "instance_id")
 
 	_network.fillFieldMap()
 
@@ -45,14 +46,15 @@ func newNetwork(db *gorm.DB, opts ...gen.DOOption) network {
 type network struct {
 	networkDo
 
-	ALL       field.Asterisk
-	ID        field.Uint
-	CreatedAt field.Time
-	UpdatedAt field.Time
-	Name      field.String
-	IPv4Addr  field.String
-	Bandwidth field.Uint
-	Traffic   field.Uint
+	ALL        field.Asterisk
+	ID         field.Uint
+	CreatedAt  field.Time
+	UpdatedAt  field.Time
+	Name       field.String
+	IPv4Addr   field.String
+	Bandwidth  field.Uint
+	Traffic    field.Uint
+	InstanceID field.Uint
 
 	fieldMap map[string]field.Expr
 }
@@ -76,6 +78,7 @@ func (n *network) updateTableName(table string) *network {
 	n.IPv4Addr = field.NewString(table, "ipv4_addr")
 	n.Bandwidth = field.NewUint(table, "bandwidth")
 	n.Traffic = field.NewUint(table, "traffic")
+	n.InstanceID = field.NewUint(table, "instance_id")
 
 	n.fillFieldMap()
 
@@ -92,7 +95,7 @@ func (n *network) GetFieldByName(fieldName string) (field.OrderExpr, bool) {
 }
 
 func (n *network) fillFieldMap() {
-	n.fieldMap = make(map[string]field.Expr, 7)
+	n.fieldMap = make(map[string]field.Expr, 8)
 	n.fieldMap["id"] = n.ID
 	n.fieldMap["created_at"] = n.CreatedAt
 	n.fieldMap["updated_at"] = n.UpdatedAt
@@ -100,6 +103,7 @@ func (n *network) fillFieldMap() {
 	n.fieldMap["ipv4_addr"] = n.IPv4Addr
 	n.fieldMap["bandwidth"] = n.Bandwidth
 	n.fieldMap["traffic"] = n.Traffic
+	n.fieldMap["instance_id"] = n.InstanceID
 }
 
 func (n network) clone(db *gorm.DB) network {
@@ -179,6 +183,7 @@ type INetworkDo interface {
 	GetByID(id uint) (result model.Network, err error)
 	Exists(name string) (result bool, err error)
 	SelectByName(name string) (result []model.Network, err error)
+	UpdateInstanceID(id uint, instanceID *uint) (rowsAffected int64, err error)
 }
 
 // SELECT * FROM @@table WHERE id = @id
@@ -218,6 +223,23 @@ func (n networkDo) SelectByName(name string) (result []model.Network, err error)
 
 	var executeSQL *gorm.DB
 	executeSQL = n.UnderlyingDB().Raw(generateSQL.String()).Find(&result) // ignore_security_alert
+	err = executeSQL.Error
+
+	return
+}
+
+// UPDATE @@table SET instance_id = @instanceID WHERE id = @id
+func (n networkDo) UpdateInstanceID(id uint, instanceID *uint) (rowsAffected int64, err error) {
+	var params []interface{}
+
+	var generateSQL strings.Builder
+	params = append(params, instanceID)
+	params = append(params, id)
+	generateSQL.WriteString("UPDATE networks SET instance_id = ? WHERE id = ? ")
+
+	var executeSQL *gorm.DB
+	executeSQL = n.UnderlyingDB().Exec(generateSQL.String(), params...) // ignore_security_alert
+	rowsAffected = executeSQL.RowsAffected
 	err = executeSQL.Error
 
 	return

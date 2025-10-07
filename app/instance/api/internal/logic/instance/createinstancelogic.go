@@ -7,6 +7,7 @@ import (
 	"github.com/bluven/f-cloud/app/instance/api/internal/types"
 	"github.com/bluven/f-cloud/app/instance/model"
 	"github.com/bluven/f-cloud/app/instance/query"
+	"github.com/bluven/f-cloud/app/network/rpc/network"
 	"github.com/bluven/f-cloud/app/storage/rpc/storage"
 	"github.com/bluven/f-cloud/pkg/auth"
 	"github.com/bluven/f-cloud/pkg/errorx"
@@ -56,6 +57,14 @@ func (l *CreateInstanceLogic) CreateInstance(req *types.CreateInstanceRequest) (
 	// 调用 storage rpc 挂载磁盘
 	_, err = l.svcCtx.StorageRpc.MountDisk(l.ctx, &storage.MountDiskRequest{
 		DiskId:     uint32(req.DiskID),
+		InstanceId: uint32(instance.ID),
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	_, err = l.svcCtx.NetworkRpc.ConnectNetwork(l.ctx, &network.ConnectNetworkRequest{
+		NetworkId:  uint32(req.NetworkID),
 		InstanceId: uint32(instance.ID),
 	})
 	if err != nil {

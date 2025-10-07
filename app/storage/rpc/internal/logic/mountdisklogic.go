@@ -2,6 +2,7 @@ package logic
 
 import (
 	"context"
+	"errors"
 
 	"github.com/zeromicro/go-zero/core/logx"
 	"gorm.io/gorm"
@@ -29,6 +30,14 @@ func (l *MountDiskLogic) MountDisk(in *proto.MountDiskRequest) (*proto.MountDisk
 	instanceId := uint(in.InstanceId)
 
 	err := query.Q.Transaction(func(tx *query.Query) error {
+		disk, err := tx.Disk.GetByID(uint(in.DiskId))
+		if err != nil {
+			return err
+		}
+		if disk.InstanceID != nil {
+			return errors.New("disk already mounted")
+		}
+
 		if ra, err := tx.Disk.UpdateInstanceID(uint(in.DiskId), &instanceId); err != nil {
 			return err
 		} else if ra == 0 {

@@ -14,4 +14,5 @@ type Config struct {
 	MySQL   gormx.MySQLConfig
 
 	StorageRpcConf zrpc.RpcClientConf
+	NetworkRpcConf zrpc.RpcClientConf
 }
