@@ -4,8 +4,8 @@ package storage;
 option go_package="./proto";
 
 message MountDiskRequest {
-  uint32 instance_id = 1;
-  uint32 disk_id = 2;
+  uint32 disk_id = 1;
+  uint32 instance_id = 2;
 }
 
 message MountDiskResponse {
@@ -13,6 +13,7 @@ message MountDiskResponse {
 
 message UnmountDiskRequest {
   uint32 disk_id = 1;
+  uint32 instance_id = 2;
 }
 
 message UnmountDiskResponse {

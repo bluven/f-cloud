@@ -10,7 +10,7 @@ Authorization: Bearer {{token}}
 
 ###
 # @prompt page
-GET http://{{host}}/v1/instances?page={{page}}&name=blu HTTP/1.1
+GET http://{{host}}/v1/instances HTTP/1.1
 Authorization: Bearer {{token}}
 
 

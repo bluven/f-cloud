@@ -112,6 +112,7 @@ func (x *ConnectNetworkRequest) GetInstanceId() uint32 {
 type DisconnectNetworkRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	NetworkId     uint32                 `protobuf:"varint,1,opt,name=network_id,json=networkId,proto3" json:"network_id,omitempty"`
+	InstanceId    uint32                 `protobuf:"varint,2,opt,name=instance_id,json=instanceId,proto3" json:"instance_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -153,6 +154,13 @@ func (x *DisconnectNetworkRequest) GetNetworkId() uint32 {
 	return 0
 }
 
+func (x *DisconnectNetworkRequest) GetInstanceId() uint32 {
+	if x != nil {
+		return x.InstanceId
+	}
+	return 0
+}
+
 var File_proto_network_proto protoreflect.FileDescriptor
 
 const file_proto_network_proto_rawDesc = "" +
@@ -163,10 +171,12 @@ const file_proto_network_proto_rawDesc = "" +
 	"\n" +
 	"network_id\x18\x01 \x01(\rR\tnetworkId\x12\x1f\n" +
 	"\vinstance_id\x18\x02 \x01(\rR\n" +
-	"instanceId\"9\n" +
+	"instanceId\"Z\n" +
 	"\x18DisconnectNetworkRequest\x12\x1d\n" +
 	"\n" +
-	"network_id\x18\x01 \x01(\rR\tnetworkId2\x93\x01\n" +
+	"network_id\x18\x01 \x01(\rR\tnetworkId\x12\x1f\n" +
+	"\vinstance_id\x18\x02 \x01(\rR\n" +
+	"instanceId2\x93\x01\n" +
 	"\aNetwork\x12@\n" +
 	"\x0eConnectNetwork\x12\x1e.network.ConnectNetworkRequest\x1a\x0e.network.Empty\x12F\n" +
 	"\x11DisconnectNetwork\x12!.network.DisconnectNetworkRequest\x1a\x0e.network.EmptyB\tZ\a./protob\x06proto3"

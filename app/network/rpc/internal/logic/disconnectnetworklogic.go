@@ -2,6 +2,7 @@ package logic
 
 import (
 	"context"
+	"errors"
 
 	"github.com/zeromicro/go-zero/core/logx"
 	"gorm.io/gorm"
@@ -27,7 +28,15 @@ func NewDisconnectNetworkLogic(ctx context.Context, svcCtx *svc.ServiceContext) 
 
 func (l *DisconnectNetworkLogic) DisconnectNetwork(in *proto.DisconnectNetworkRequest) (*proto.Empty, error) {
 	err := query.Q.Transaction(func(tx *query.Query) error {
-		ra, err := tx.Network.UpdateInstanceID(uint(in.NetworkId), nil)
+		network, err := tx.Network.GetByID(uint(in.NetworkId))
+		if err != nil {
+			return err
+		}
+		if *network.InstanceID != uint(in.InstanceId) {
+			return errors.New("network not connected to specified instance")
+		}
+
+		ra, err := tx.Network.Debug().UpdateInstanceID(uint(in.NetworkId), nil)
 
 		switch {
 		case err == nil && ra == 0:

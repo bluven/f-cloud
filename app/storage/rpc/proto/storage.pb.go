@@ -23,8 +23,8 @@ const (
 
 type MountDiskRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	InstanceId    uint32                 `protobuf:"varint,1,opt,name=instance_id,json=instanceId,proto3" json:"instance_id,omitempty"`
-	DiskId        uint32                 `protobuf:"varint,2,opt,name=disk_id,json=diskId,proto3" json:"disk_id,omitempty"`
+	DiskId        uint32                 `protobuf:"varint,1,opt,name=disk_id,json=diskId,proto3" json:"disk_id,omitempty"`
+	InstanceId    uint32                 `protobuf:"varint,2,opt,name=instance_id,json=instanceId,proto3" json:"instance_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -59,16 +59,16 @@ func (*MountDiskRequest) Descriptor() ([]byte, []int) {
 	return file_proto_storage_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *MountDiskRequest) GetInstanceId() uint32 {
+func (x *MountDiskRequest) GetDiskId() uint32 {
 	if x != nil {
-		return x.InstanceId
+		return x.DiskId
 	}
 	return 0
 }
 
-func (x *MountDiskRequest) GetDiskId() uint32 {
+func (x *MountDiskRequest) GetInstanceId() uint32 {
 	if x != nil {
-		return x.DiskId
+		return x.InstanceId
 	}
 	return 0
 }
@@ -112,6 +112,7 @@ func (*MountDiskResponse) Descriptor() ([]byte, []int) {
 type UnmountDiskRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	DiskId        uint32                 `protobuf:"varint,1,opt,name=disk_id,json=diskId,proto3" json:"disk_id,omitempty"`
+	InstanceId    uint32                 `protobuf:"varint,2,opt,name=instance_id,json=instanceId,proto3" json:"instance_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -149,6 +150,13 @@ func (*UnmountDiskRequest) Descriptor() ([]byte, []int) {
 func (x *UnmountDiskRequest) GetDiskId() uint32 {
 	if x != nil {
 		return x.DiskId
+	}
+	return 0
+}
+
+func (x *UnmountDiskRequest) GetInstanceId() uint32 {
+	if x != nil {
+		return x.InstanceId
 	}
 	return 0
 }
@@ -194,13 +202,15 @@ var File_proto_storage_proto protoreflect.FileDescriptor
 const file_proto_storage_proto_rawDesc = "" +
 	"\n" +
 	"\x13proto/storage.proto\x12\astorage\"L\n" +
-	"\x10MountDiskRequest\x12\x1f\n" +
-	"\vinstance_id\x18\x01 \x01(\rR\n" +
-	"instanceId\x12\x17\n" +
-	"\adisk_id\x18\x02 \x01(\rR\x06diskId\"\x13\n" +
-	"\x11MountDiskResponse\"-\n" +
+	"\x10MountDiskRequest\x12\x17\n" +
+	"\adisk_id\x18\x01 \x01(\rR\x06diskId\x12\x1f\n" +
+	"\vinstance_id\x18\x02 \x01(\rR\n" +
+	"instanceId\"\x13\n" +
+	"\x11MountDiskResponse\"N\n" +
 	"\x12UnmountDiskRequest\x12\x17\n" +
-	"\adisk_id\x18\x01 \x01(\rR\x06diskId\"\x15\n" +
+	"\adisk_id\x18\x01 \x01(\rR\x06diskId\x12\x1f\n" +
+	"\vinstance_id\x18\x02 \x01(\rR\n" +
+	"instanceId\"\x15\n" +
 	"\x13UnmountDiskResponse2\x97\x01\n" +
 	"\aStorage\x12B\n" +
 	"\tMountDisk\x12\x19.storage.MountDiskRequest\x1a\x1a.storage.MountDiskResponse\x12H\n" +

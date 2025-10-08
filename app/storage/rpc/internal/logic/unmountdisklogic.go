@@ -2,6 +2,7 @@ package logic
 
 import (
 	"context"
+	"errors"
 
 	"github.com/zeromicro/go-zero/core/logx"
 	"gorm.io/gorm"
@@ -27,6 +28,14 @@ func NewUnmountDiskLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Unmou
 
 func (l *UnmountDiskLogic) UnmountDisk(in *proto.UnmountDiskRequest) (*proto.UnmountDiskResponse, error) {
 	err := query.Q.Transaction(func(tx *query.Query) error {
+		disk, err := tx.Disk.GetByID(uint(in.DiskId))
+		if err != nil {
+			return err
+		}
+		if *disk.InstanceID != uint(in.InstanceId) {
+			return errors.New("disk not mounted to specified instance")
+		}
+
 		if ra, err := tx.Disk.UpdateInstanceID(uint(in.DiskId), nil); err != nil {
 			return err
 		} else if ra == 0 {

@@ -12,11 +12,19 @@ MySQL:
   ConnMaxLifetime: 1h
 
 StorageRpcConf:
-  Endpoints:
-    - 127.0.0.1:3636
+  Etcd:
+    Hosts:
+    - 127.0.0.1:2379
+    Key: storage.rpc
+  #Endpoints:
+  #  - 127.0.0.1:3636
   NonBlock: true
 
 NetworkRpcConf:
-  Endpoints:
-    - 127.0.0.1:9595
+  Etcd:
+    Hosts:
+    - 127.0.0.1:2379
+    Key: network.rpc
+  #Endpoints:
+  #  - 127.0.0.1:9595
   NonBlock: true

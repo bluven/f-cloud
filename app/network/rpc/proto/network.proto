@@ -12,6 +12,7 @@ message ConnectNetworkRequest {
 
 message DisconnectNetworkRequest {
   uint32 network_id = 1;
+  uint32 instance_id = 2;
 }
 
 service Network {
