@@ -1,6 +1,7 @@
 package svc
 
 import (
+	"github.com/hibiken/asynq"
 	"github.com/zeromicro/go-zero/rest"
 	"github.com/zeromicro/go-zero/zrpc"
 
@@ -17,6 +18,7 @@ type ServiceContext struct {
 	CurrentUserRequired rest.Middleware
 	StorageRpc          storage.Storage
 	NetworkRpc          network.Network
+	TaskClient          *asynq.Client
 }
 
 func NewServiceContext(c config.Config) *ServiceContext {
@@ -28,5 +30,6 @@ func NewServiceContext(c config.Config) *ServiceContext {
 		CurrentUserRequired: middleware.CurrentUserRequired,
 		StorageRpc:          storage.NewStorage(zrpc.MustNewClient(c.StorageRpcConf)),
 		NetworkRpc:          network.NewNetwork(zrpc.MustNewClient(c.NetworkRpcConf)),
+		TaskClient:          asynq.NewClient(asynq.RedisClientOpt{Addr: c.Redis.Host, Password: c.Redis.Pass}),
 	}
 }

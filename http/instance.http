@@ -26,8 +26,8 @@ Authorization: Bearer {{token}}
     "memory": 32,
     "os": "linux",
     "image": "ubuntu-22.04",
-    "diskID": 2,
-    "networkID": 3
+    "diskID": 1,
+    "networkID": 1
 }
 
 ###

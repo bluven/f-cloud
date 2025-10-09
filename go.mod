@@ -5,6 +5,7 @@ go 1.23.4
 require (
 	github.com/go-playground/validator/v10 v10.27.0
 	github.com/golang-jwt/jwt/v4 v4.5.2
+	github.com/hibiken/asynq v0.25.1
 	github.com/zeromicro/go-zero v1.9.0
 	google.golang.org/grpc v1.65.0
 	google.golang.org/protobuf v1.36.5
@@ -62,7 +63,9 @@ require (
 	github.com/prometheus/common v0.62.0 // indirect
 	github.com/prometheus/procfs v0.15.1 // indirect
 	github.com/redis/go-redis/v9 v9.12.1 // indirect
+	github.com/robfig/cron/v3 v3.0.1 // indirect
 	github.com/spaolacci/murmur3 v1.1.0 // indirect
+	github.com/spf13/cast v1.7.0 // indirect
 	go.etcd.io/etcd/api/v3 v3.5.15 // indirect
 	go.etcd.io/etcd/client/pkg/v3 v3.5.15 // indirect
 	go.etcd.io/etcd/client/v3 v3.5.15 // indirect

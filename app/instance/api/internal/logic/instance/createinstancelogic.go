@@ -3,16 +3,15 @@ package instance
 import (
 	"context"
 
+	"github.com/zeromicro/go-zero/core/logx"
+
 	"github.com/bluven/f-cloud/app/instance/api/internal/svc"
 	"github.com/bluven/f-cloud/app/instance/api/internal/types"
 	"github.com/bluven/f-cloud/app/instance/model"
 	"github.com/bluven/f-cloud/app/instance/query"
-	"github.com/bluven/f-cloud/app/network/rpc/network"
-	"github.com/bluven/f-cloud/app/storage/rpc/storage"
+	tasktypes "github.com/bluven/f-cloud/app/instance/taskq/types"
 	"github.com/bluven/f-cloud/pkg/auth"
 	"github.com/bluven/f-cloud/pkg/errorx"
-
-	"github.com/zeromicro/go-zero/core/logx"
 )
 
 type CreateInstanceLogic struct {
@@ -47,29 +46,22 @@ func (l *CreateInstanceLogic) CreateInstance(req *types.CreateInstanceRequest) (
 			return errorx.NewConflict("name already exists")
 		}
 
-		return tx.Instance.Create(&instance)
-	})
-	if err != nil {
-		return nil, err
-	}
+		if err = tx.Instance.Create(&instance); err != nil {
+			return err
+		}
 
-	// todo: put in job queue
-	// 调用 storage rpc 挂载磁盘
-	_, err = l.svcCtx.StorageRpc.MountDisk(l.ctx, &storage.MountDiskRequest{
-		DiskId:     uint32(req.DiskID),
-		InstanceId: uint32(instance.ID),
-	})
-	if err != nil {
-		return nil, err
-	}
-
-	_, err = l.svcCtx.NetworkRpc.ConnectNetwork(l.ctx, &network.ConnectNetworkRequest{
-		NetworkId:  uint32(req.NetworkID),
-		InstanceId: uint32(instance.ID),
+		return l.enqueueCreateInstanceTask(instance.ID)
 	})
 	if err != nil {
 		return nil, err
 	}
 
 	return types.FromInstance(instance), nil
+}
+
+func (l *CreateInstanceLogic) enqueueCreateInstanceTask(instanceID uint) error {
+	task := tasktypes.NewTaskInstanceInit(instanceID)
+
+	_, err := l.svcCtx.TaskClient.Enqueue(task)
+	return err
 }

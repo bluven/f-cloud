@@ -3,14 +3,13 @@ package instance
 import (
 	"context"
 
+	"github.com/zeromicro/go-zero/core/logx"
+
 	"github.com/bluven/f-cloud/app/instance/api/internal/svc"
 	"github.com/bluven/f-cloud/app/instance/api/internal/types"
 	"github.com/bluven/f-cloud/app/instance/query"
-	"github.com/bluven/f-cloud/app/network/rpc/network"
-	"github.com/bluven/f-cloud/app/storage/rpc/storage"
+	tasktypes "github.com/bluven/f-cloud/app/instance/taskq/types"
 	"github.com/bluven/f-cloud/pkg/errorx"
-
-	"github.com/zeromicro/go-zero/core/logx"
 )
 
 type DeleteInstanceLogic struct {
@@ -28,15 +27,11 @@ func NewDeleteInstanceLogic(ctx context.Context, svcCtx *svc.ServiceContext) *De
 }
 
 func (l *DeleteInstanceLogic) DeleteInstance(req *types.DeleteRequest) (resp *types.EmptyResponse, err error) {
-
-	var diskID, networkID uint32
 	err = query.Q.Transaction(func(tx *query.Query) error {
 		instance, err := tx.Instance.GetByID(uint(req.ID))
 		if err != nil {
 			return err
 		}
-		diskID = uint32(instance.DiskID)
-		networkID = uint32(instance.NetworkID)
 
 		ri, err := tx.Instance.Delete(&instance)
 		switch {
@@ -45,30 +40,12 @@ func (l *DeleteInstanceLogic) DeleteInstance(req *types.DeleteRequest) (resp *ty
 		case ri.RowsAffected == 0:
 			return errorx.NewNotFound("instance not found")
 		default:
-			return nil
 		}
-	})
-	if err != nil {
-		return nil, err
-	}
 
-	// todo: put in job queue
-	// 调用 storage rpc 挂载磁盘
-	_, err = l.svcCtx.StorageRpc.UnmountDisk(l.ctx, &storage.UnmountDiskRequest{
-		DiskId:     diskID,
-		InstanceId: uint32(req.ID),
+		task := tasktypes.NewTaskInstanceDestroy(instance.ID, instance.NetworkID, instance.DiskID)
+		_, err = l.svcCtx.TaskClient.Enqueue(task)
+		return err
 	})
-	if err != nil {
-		return nil, err
-	}
 
-	_, err = l.svcCtx.NetworkRpc.DisconnectNetwork(l.ctx, &network.DisconnectNetworkRequest{
-		NetworkId:  networkID,
-		InstanceId: uint32(req.ID),
-	})
-	if err != nil {
-		return nil, err
-	}
-
-	return &types.EmptyResponse{}, nil
+	return &types.EmptyResponse{}, err
 }
