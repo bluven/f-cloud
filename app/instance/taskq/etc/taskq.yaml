@@ -1,6 +1,4 @@
-Name: instance
-Host: 0.0.0.0
-Port: 5050
+Name: instance.taskq
 
 Redis:
   Host: 127.0.0.1:6379
@@ -28,3 +26,9 @@ NetworkRpcConf:
   #Endpoints:
   #  - 127.0.0.1:9595
   NonBlock: true
+
+Telemetry:
+  Name: instance.taskq
+  Endpoint: http://127.0.0.1:14268/api/traces
+  Sampler: 1.0
+  Batcher: jaeger

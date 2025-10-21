@@ -1,4 +1,4 @@
-@host = 127.0.0.1:8888
+@host = 127.0.0.1:8787
 @contentType = application/json
 @token={{$dotenv TOKEN}}
 GET http://{{host}}/v1/users/3 HTTP/1.1

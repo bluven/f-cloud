@@ -1,6 +1,6 @@
-Name: user
+Name: user.api
 Host: 0.0.0.0
-Port: 8888
+Port: 8787
 
 JWTAuth:
   Issuer: f-cloud
@@ -12,3 +12,9 @@ MySQL:
   MaxIdleConns: 10    
   MaxOpenConns: 50
   ConnMaxLifetime: 1h
+
+Telemetry:
+  Name: user.api
+  Endpoint: http://127.0.0.1:14268/api/traces
+  Sampler: 1.0
+  Batcher: jaeger

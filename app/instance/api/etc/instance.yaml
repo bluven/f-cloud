@@ -31,3 +31,9 @@ NetworkRpcConf:
   #Endpoints:
   #  - 127.0.0.1:9595
   NonBlock: true
+
+Telemetry:
+  Name: instance.api
+  Endpoint: http://127.0.0.1:14268/api/traces
+  Sampler: 1.0
+  Batcher: jaeger

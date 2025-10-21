@@ -1,4 +1,4 @@
-@host = 127.0.0.1:8888
+@host = 127.0.0.1:8787
 @contentType = application/json
 @token={{$dotenv TOKEN}}
 
