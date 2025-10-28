@@ -63,6 +63,11 @@ type OperateHostRequest {
 	Operation string `path:"operation"`
 }
 
+service host {
+	@handler Health
+	get /health
+}
+
 @server (
 	prefix:     /v1
 	jwt:        JWTAuth

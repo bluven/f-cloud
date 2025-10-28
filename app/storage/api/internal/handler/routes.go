@@ -8,6 +8,7 @@ import (
 
 	backup "github.com/bluven/f-cloud/app/storage/api/internal/handler/backup"
 	disk "github.com/bluven/f-cloud/app/storage/api/internal/handler/disk"
+	health "github.com/bluven/f-cloud/app/storage/api/internal/handler/health"
 	"github.com/bluven/f-cloud/app/storage/api/internal/svc"
 
 	"github.com/zeromicro/go-zero/rest"
@@ -82,5 +83,15 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 		),
 		rest.WithJwt(serverCtx.Config.JWTAuth.AccessSecret),
 		rest.WithPrefix("/v1"),
+	)
+
+	server.AddRoutes(
+		[]rest.Route{
+			{
+				Method:  http.MethodGet,
+				Path:    "/health",
+				Handler: health.HealthHandler(serverCtx),
+			},
+		},
 	)
 }

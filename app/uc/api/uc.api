@@ -71,6 +71,11 @@ type ListResponse {
 	PageSize    uint   `json:"pageSize"`
 }
 
+service user {
+	@handler Health
+	get /health
+}
+
 @server (
 	prefix: /v1
 )
