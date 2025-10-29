@@ -1,0 +1,30 @@
+@host = 127.0.0.1:9080
+@contentType = application/json
+@token={{$dotenv TOKEN}}
+
+###
+# @prompt username
+# @prompt password
+POST http://{{host}}/uc/v1/auth/login HTTP/1.1
+Content-Type: {{contentType}}
+
+{
+    "username": "{{username}}",
+    "password": "{{password}}"
+}
+
+###
+GET http://{{host}}/host/v1/hosts HTTP/1.1
+Authorization: Bearer {{token}}
+
+###
+GET http://{{host}}/network/v1/networks HTTP/1.1
+Authorization: Bearer {{token}}
+
+###
+GET http://{{host}}/storage/v1/disks HTTP/1.1
+Authorization: Bearer {{token}}
+
+###
+GET http://{{host}}/instance/v1/instances HTTP/1.1
+Authorization: Bearer {{token}}
