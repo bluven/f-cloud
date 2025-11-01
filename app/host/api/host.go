@@ -11,6 +11,7 @@ import (
 	"github.com/bluven/f-cloud/app/host/api/internal/config"
 	"github.com/bluven/f-cloud/app/host/api/internal/handler"
 	"github.com/bluven/f-cloud/app/host/api/internal/svc"
+	"github.com/bluven/f-cloud/pkg/auth"
 	"github.com/bluven/f-cloud/pkg/errorx"
 )
 
@@ -22,7 +23,7 @@ func main() {
 	var c config.Config
 	conf.MustLoad(*configFile, &c)
 
-	server := rest.MustNewServer(c.RestConf)
+	server := rest.MustNewServer(c.RestConf, rest.WithUnauthorizedCallback(auth.UnauthorizedCallback))
 	defer server.Stop()
 
 	ctx := svc.NewServiceContext(c)
