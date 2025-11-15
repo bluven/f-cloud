@@ -53,5 +53,7 @@ func (l *UpdateUserLogic) UpdateUser(req *types.UpdateRequest) (resp *types.User
 		return nil, err
 	}
 
+	cacheDeleteUser(l.ctx, l.svcCtx, req.ID)
+
 	return types.FromUserModel(user), nil
 }

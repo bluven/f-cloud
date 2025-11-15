@@ -5,7 +5,6 @@ import (
 
 	"github.com/bluven/f-cloud/app/uc/api/internal/svc"
 	"github.com/bluven/f-cloud/app/uc/api/internal/types"
-	"github.com/bluven/f-cloud/app/uc/query"
 	"github.com/bluven/f-cloud/pkg/auth"
 
 	"github.com/zeromicro/go-zero/core/logx"
@@ -26,7 +25,7 @@ func NewGetCurrentUserLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Ge
 }
 
 func (l *GetCurrentUserLogic) GetCurrentUser(_ *types.EmptyRequest) (resp *types.User, err error) {
-	user, err := query.User.GetByID(auth.GetUserID(l.ctx))
+	user, err := cacheGetUser(l.ctx, l.svcCtx, auth.GetUserID(l.ctx))
 	if err != nil {
 		return nil, err
 	}

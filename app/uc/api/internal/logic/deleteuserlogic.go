@@ -38,5 +38,7 @@ func (l *DeleteUserLogic) DeleteUser(req *types.GetRequest) (resp *types.EmptyRe
 		return nil, gorm.ErrRecordNotFound
 	}
 
+	cacheDeleteUser(l.ctx, l.svcCtx, req.ID)
+
 	return &types.EmptyResponse{}, nil
 }

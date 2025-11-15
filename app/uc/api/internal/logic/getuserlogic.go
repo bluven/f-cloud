@@ -7,7 +7,6 @@ import (
 
 	"github.com/bluven/f-cloud/app/uc/api/internal/svc"
 	"github.com/bluven/f-cloud/app/uc/api/internal/types"
-	"github.com/bluven/f-cloud/app/uc/query"
 	"github.com/bluven/f-cloud/pkg/auth"
 	"github.com/bluven/f-cloud/pkg/errorx"
 )
@@ -31,7 +30,7 @@ func (l *GetUserLogic) GetUser(req *types.GetRequest) (resp *types.User, err err
 		return nil, errorx.ErrForbidden
 	}
 
-	user, err := query.User.GetByID(req.ID)
+	user, err := cacheGetUser(l.ctx, l.svcCtx, req.ID)
 	if err != nil {
 		return nil, err
 	}
